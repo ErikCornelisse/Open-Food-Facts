@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const chorizoModal = document.getElementById('chorizo-modal');
     const zerowModal = document.getElementById('zerow-modal');
-    const homeFabModal = document.getElementById('home-fab-modal'); // Added for the new modal
+    const homeFabModal = document.getElementById('home-fab-modal');
     const logo = document.getElementById('logo');
     const appTitle = document.getElementById('app-title');
     const zerowDataSpaceButton = document.getElementById('zerow-data-space-button');
@@ -31,15 +31,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Modal Logic ---
     logo.addEventListener('click', () => {
         chorizoModal.style.display = 'block';
-        setFabState('info');
+        setFabState('modal');
     });
     appTitle.addEventListener('click', () => {
         chorizoModal.style.display = 'block';
-        setFabState('info');
+        setFabState('modal');
     });
     zerowDataSpaceButton.addEventListener('click', () => {
         zerowModal.style.display = 'block';
-        setFabState('info');
+        setFabState('modal');
     });
 
     // closeChorizoModal.addEventListener('click', () => {
@@ -65,12 +65,12 @@ document.addEventListener('DOMContentLoaded', () => {
             zerowModal.style.display = 'none';
             modalWasClosed = true;
         }
-        if (event.target === homeFabModal) { // Added to handle closing home-fab-modal
+        if (event.target === homeFabModal) {
             homeFabModal.style.display = 'none';
             modalWasClosed = true;
         }
-        if (modalWasClosed && fabState === 'info') {
-            setFabState('home');
+        if (modalWasClosed && fabState === 'modal') {
+            setFabState(fabPreviousState);
         }
     });
 
@@ -217,19 +217,18 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- FAB Logic ---
     const fab = document.getElementById('fab');
     let fabState = 'home'; // Initial state
+    let fabPreviousState = 'home'; // Previous state before a modal was opened
 
     const fabIcons = {
         'home': 'home',
         'category': 'chevron_left',
-        'close': 'close',
-        'info': 'close' // Changed from 'info' to 'close'
+        'modal': 'close' // Renamed from 'info', removed original 'close'
     };
 
-    const fabActions = {
+    const fabActions = { // Actions are mostly for debugging, core logic is in event listeners
         'home': () => { console.log('FAB: Home action'); },
         'category': () => { console.log('FAB: Category action'); },
-        'close': () => { console.log('FAB: Close action'); },
-        'info': () => { console.log('FAB: Info action'); }
+        'modal': () => { console.log('FAB: Modal action, closing modal'); } // Renamed from 'info'
     };
 
     function updateFab() {
@@ -240,14 +239,14 @@ document.addEventListener('DOMContentLoaded', () => {
     fab.addEventListener('click', () => {
         if (fabState === 'home') {
             homeFabModal.style.display = 'block';
-            setFabState('info');
+            setFabState('modal');
         } else if (fabState === 'category') {
             showCategoryView(); // This will also set FAB state to home via its own call to setFabState
-        } else if (fabState === 'info') {
+        } else if (fabState === 'modal') { // Changed from 'info'
             chorizoModal.style.display = 'none';
             zerowModal.style.display = 'none';
-            homeFabModal.style.display = 'none'; // Ensure home-fab-modal is also closed
-            setFabState('home');
+            homeFabModal.style.display = 'none';
+            setFabState(fabPreviousState); // Revert to previous state
         } else {
             // Fallback for other states, if any are defined with actions
             if (fabActions[fabState]) {
@@ -259,6 +258,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to allow other parts of the app to change FAB state
     function setFabState(newState) {
         if (fabIcons[newState]) {
+            // If transitioning TO modal state, and not already in modal state,
+            // save the state we are coming FROM.
+            if (newState === 'modal' && fabState !== 'modal') {
+                fabPreviousState = fabState;
+            }
             fabState = newState;
             updateFab();
         }
