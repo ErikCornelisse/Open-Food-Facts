@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const homeFabModal = document.getElementById('home-fab-modal');
     const logo = document.getElementById('logo');
     const appTitle = document.getElementById('app-title');
-    const zerowDataSpaceButton = document.getElementById('zerow-data-space-button');
+    // const zerowDataSpaceButton = document.getElementById('zerow-data-space-button');
     // const closeChorizoModal = document.getElementById('close-chorizo-modal');
     // const closeZerowModal = document.getElementById('close-zerow-modal');
 
@@ -37,10 +37,10 @@ document.addEventListener('DOMContentLoaded', () => {
         chorizoModal.style.display = 'block';
         setFabState('modal');
     });
-    zerowDataSpaceButton.addEventListener('click', () => {
-        zerowModal.style.display = 'block';
-        setFabState('modal');
-    });
+    // zerowDataSpaceButton.addEventListener('click', () => {
+    //     zerowModal.style.display = 'block';
+    //     setFabState('modal');
+    // });
 
     // closeChorizoModal.addEventListener('click', () => {
     //     chorizoModal.style.display = 'none';
@@ -273,4 +273,54 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initial data fetch
     fetchData();
+
+    // --- Info Card Animation Logic ---
+    const infoCardsContainer = document.querySelector('.info-cards-container');
+    const infoCards = Array.from(infoCardsContainer?.querySelectorAll('.info-card') || []);
+    let currentVisibleCardIndex = 0;
+    let infoCardIntervalId = null;
+
+    function animateInfoCards() {
+        if (!infoCardsContainer || infoCards.length < 2) return; // Need at least 2 cards to animate
+
+        // Check if only one card is effectively visible due to CSS rules (excluding display:none)
+        // This is a proxy for the @media (max-width: 687px) condition
+        const visibleCardsCount = infoCards.filter(card => getComputedStyle(card).display !== 'none').length;
+        
+        if (window.innerWidth <= 687) { // Matches the CSS breakpoint for showing 1 card
+            if (!infoCardIntervalId) { // Start animation if not already running
+                infoCardsContainer.classList.add('info-card-animating');
+                // Ensure first card is visible initially
+                infoCards.forEach(card => card.classList.remove('info-card-visible'));
+                if(infoCards[0]) infoCards[0].classList.add('info-card-visible');
+                currentVisibleCardIndex = 0;
+
+                infoCardIntervalId = setInterval(() => {
+                    if (infoCards[currentVisibleCardIndex]) {
+                        infoCards[currentVisibleCardIndex].classList.remove('info-card-visible');
+                    }
+                    currentVisibleCardIndex = (currentVisibleCardIndex + 1) % 2; // Cycle between first two cards
+                    if (infoCards[currentVisibleCardIndex]) {
+                        infoCards[currentVisibleCardIndex].classList.add('info-card-visible');
+                    }
+                }, 5000); // Change every 5 seconds
+            }
+        } else { // Wider than 687px
+            if (infoCardIntervalId) { // Stop animation if running
+                clearInterval(infoCardIntervalId);
+                infoCardIntervalId = null;
+                infoCardsContainer.classList.remove('info-card-animating');
+                // Reset styles: remove individual visibility class and let CSS media queries handle display
+                infoCards.forEach(card => {
+                    card.classList.remove('info-card-visible');
+                    card.style.display = ''; // Reset display to let CSS take over
+                    card.style.opacity = ''; // Reset opacity
+                });
+            }
+        }
+    }
+
+    // Run on load and on resize to start/stop animation based on viewport width
+    animateInfoCards();
+    window.addEventListener('resize', animateInfoCards);
 });

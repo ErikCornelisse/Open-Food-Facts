@@ -283,6 +283,107 @@ footer a:hover {
     color: #ffffff; /* White on hover for better visibility */
 }
 
+/* Info Cards Section */
+#info-cards-section {
+    background-color: #ffffff;
+    padding: 1rem 0; /* Vertical padding for the section */
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.info-cards-container {
+    display: grid; /* Changed from flex */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Added */
+    max-width: 1200px;
+    margin: 0 auto; /* Center on desktop and mobile */
+    gap: 1.5rem; /* Consistent gap between slides */
+    padding: 0 2rem; /* Default horizontal padding, matches main */
+    box-sizing: border-box; /* Include padding in width calculation */
+}
+
+.info-card {
+    background-color: #fff; /* Card background */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Card shadow */
+    padding: 1.5rem; /* Consistent card padding, same as category-card */
+    box-sizing: border-box;
+    /* width: 300px; Removed, grid handles width */
+    text-align: left; /* Changed from center to left */
+    /* flex-shrink: 0; Removed, not for grid items here */
+    display: flex; /* Added for centering content */
+    flex-direction: column; /* Added to stack content vertically */
+    justify-content: center; /* Added for vertical centering */
+    align-items: flex-start; /* Changed from center to flex-start for left alignment of content blocks */
+}
+
+/* Specific style for info-card containing only an image */
+.info-card img {
+    width: 100%; /* Make image take full width of card */
+    height: 100%; /* Make image take full height of card */
+    object-fit: cover; /* Cover the area, may crop */
+    border-radius: inherit; /* Inherit border-radius from parent card if needed */
+}
+
+.info-card:has(img) {
+    padding: 0; /* Remove padding if card only contains an image */
+}
+
+.info-card h4 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    color: #2A5A5B; /* Match category card title color */
+    font-size: 1.25rem; /* Match category card h3 title size */
+}
+
+.info-card p {
+    margin-bottom: 0;
+    font-size: 1rem; /* Match category card description font size */
+    color: #2A5A5B; /* Match category card description color */
+}
+
+/* Responsive hiding of info-cards */
+/* Hide 3rd card when viewport width is 1011px or less (typically not enough space for 3 cards) */
+@media (max-width: 1011px) {
+    .info-cards-container .info-card:nth-child(3) {
+        display: none;
+    }
+}
+
+/* Styles for info-card animation and hiding at <= 687px */
+@media (max-width: 687px) {
+    /* Default hiding for 2nd card when not animating */
+    .info-cards-container:not(.info-card-animating) .info-card:nth-child(2) {
+        display: none;
+    }
+    /* Note: 3rd card is already hidden by the (max-width: 1011px) rule and will remain so. */
+
+    /* Styles for when animation is active (JS adds .info-card-animating to container) */
+    .info-cards-container.info-card-animating .info-card {
+        display: none; /* Base state for animating cards: hidden */
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out;
+        /* The card will take up available width in the container when display: block */
+    }
+
+    .info-cards-container.info-card-animating .info-card.info-card-visible {
+        display: block; /* Make the active card visible */
+        opacity: 1;
+    }
+}
+
+/* Mobile: Responsive layout for info cards */
+@media (max-width: 768px) {
+    /* No specific mobile overrides needed here for #info-cards-section or .info-cards-container */
+    /* The base grid styles will apply, allowing cards to wrap */
+}
+
+/* Adjust padding for very small screens, consistent with main content */
+@media (max-width: 480px) {
+    .info-cards-container {
+        padding: 0 1rem; /* Matches main's padding on very small screens */
+    }
+}
+
 /* Modal Styles */
 .modal {
     display: none; 
