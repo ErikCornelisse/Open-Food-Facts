@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const categoryCardsContainer = document.getElementById('category-cards-container');
     const activityCardsContainer = document.getElementById('activity-cards-container');
     const activityViewTitle = document.getElementById('activity-view-title');
+    const infoCardsSection = document.getElementById('info-cards-section'); // Added this line
 
     const chorizoModal = document.getElementById('chorizo-modal');
     const zerowModal = document.getElementById('zerow-modal');
@@ -27,6 +28,12 @@ document.addEventListener('DOMContentLoaded', () => {
         "general awareness-raising": "school",
         "whole supply chain": "link" // Fallback icon
     };
+
+    // Helper function to capitalize the first word of a string
+    function capitalizeFirstWord(str) {
+        if (!str) return '';
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
 
     // --- Modal Logic ---
     logo.addEventListener('click', () => {
@@ -123,9 +130,10 @@ document.addEventListener('DOMContentLoaded', () => {
             card.className = 'category-card';
 
             const iconName = categoryIcons[categoryName.toLowerCase()] || categoryIcons["whole supply chain"];
+            const capitalizedCategoryName = capitalizeFirstWord(categoryName);
             
             card.innerHTML = `
-                <h3><span class="material-icons-outlined category-icon">${iconName}</span> ${categoryName}</h3>
+                <h3><span class="material-icons-outlined category-icon">${iconName}</span> ${capitalizedCategoryName}</h3>
                 <p class="activity-count">${activities.length} activities</p>
                 <p class="category-description">${getCategoryDescription(categoryName)}</p>
             `;
@@ -158,6 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const title = activity.action || 'N/A';
+            const capitalizedTitle = capitalizeFirstWord(title);
             const goals = activity['goals/objectives'] || 'No description available.';
             
             let tagsHTML = '<div class="activity-tags">';
@@ -188,7 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
             card.innerHTML = `
                 <div class="activity-card-header">
                     ${headerIcon}
-                    <h4>${title}</h4>
+                    <h4>${capitalizedTitle}</h4>
                 </div>
                 <p class="goals">${goals}</p>
                 ${tagsHTML}
@@ -199,10 +208,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function showActivityView(categoryName, activities) {
-        activityViewTitle.textContent = `${categoryName} - Activities`;
+        const capitalizedCategoryName = capitalizeFirstWord(categoryName);
+        activityViewTitle.textContent = `${capitalizedCategoryName} - Activities`;
         renderActivityCards(activities);
         categoryView.classList.add('hidden');
         activityView.classList.remove('hidden');
+        if (infoCardsSection) { // Added this block
+            infoCardsSection.classList.add('hidden');
+        }
         window.scrollTo(0, 0); // Scroll to top
         setFabState('category'); // Set FAB state to category
     }
@@ -210,6 +223,9 @@ document.addEventListener('DOMContentLoaded', () => {
     function showCategoryView() {
         activityView.classList.add('hidden');
         categoryView.classList.remove('hidden');
+        if (infoCardsSection) { // Added this block
+            infoCardsSection.classList.remove('hidden');
+        }
         window.scrollTo(0, 0); // Scroll to top
         setFabState('home'); // Set FAB state to home
     }
