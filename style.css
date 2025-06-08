@@ -501,6 +501,18 @@ footer a:hover {
     justify-content: center;
     align-items: center;
     gap: 2rem;
+    position: relative; /* Enable positioning for child elements */
+}
+
+.splash-connecting-line {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background-color: rgb(145, 188, 161); /* Same color as hexagon container */
+    z-index: 1; /* Place behind the icons but above modal background */
+    transform: translateY(-50%); /* Center vertically */
 }
 
 .splash-icon {
@@ -515,6 +527,42 @@ footer a:hover {
     align-items: center;
     justify-content: center;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    position: relative;
+    z-index: 2; /* Ensure icons appear above the connecting line */
+}
+
+.splash-icon-logo {
+    padding: 0.5rem; /* Reduced padding for logo icons */
+}
+
+.splash-icon-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 0; /* Remove border-radius for the image itself */
+}
+
+/* Hexagonal container for ZeroW logo */
+.splash-icon-hexagon {
+    border-radius: 0; /* Remove circular border-radius */
+    background-color: rgb(145, 188, 161); /* Custom green background color */
+    clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+    position: relative;
+    width: 4.2rem; /* 5% wider than the original 4rem */
+    height: 4rem; /* Ensure same height as other icon containers */
+}
+
+/* Cubic container for first splash icon */
+.splash-icon-cubic {
+    border-radius: 8px; /* Rounded corners for cubic appearance */
+    background-color: #f4f4f4; /* Same background as default splash icons */
+    width: 4.2rem; /* 5% larger than default icons (4rem * 1.05) */
+    height: 4.2rem; /* 5% larger than default icons (4rem * 1.05) */
+}
+
+/* Reduced radius container for third splash icon */
+.splash-icon-reduced-radius {
+    border-radius: 45%; /* 10% reduction from default 50% radius */
 }
 
 .splash-button {
