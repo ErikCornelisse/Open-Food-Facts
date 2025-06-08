@@ -556,13 +556,17 @@ footer a:hover {
 .splash-icon-cubic {
     border-radius: 8px; /* Rounded corners for cubic appearance */
     background-color: #f4f4f4; /* Same background as default splash icons */
+    border: 3px solid rgb(145, 188, 161); /* Green border matching hexagon and connecting line */
     width: 4.2rem; /* 5% larger than default icons (4rem * 1.05) */
     height: 4.2rem; /* 5% larger than default icons (4rem * 1.05) */
 }
 
 /* Reduced radius container for third splash icon */
 .splash-icon-reduced-radius {
-    border-radius: 45%; /* 10% reduction from default 50% radius */
+    border-radius: 50%; /* Perfect circular border */
+    border: 3px solid rgb(145, 188, 161); /* Green border matching hexagon and connecting line */
+    width: 3.2rem; /* Further reduced for better visual alignment */
+    height: 3.2rem; /* Further reduced for better visual alignment */
 }
 
 .splash-button {
