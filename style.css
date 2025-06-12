@@ -40,8 +40,8 @@ header {
 
 .logo {
     display: block; /* Explicit display type */
-    width: 50px; /* Explicitly set width */
-    height: 50px; 
+    width: auto; /* Auto width for horizontal SVG logo */
+    height: 50px; /* Set height to 50px */
     margin-right: 1rem; /* Add margin to space logo from title */
     object-fit: contain; /* Ensure proper scaling */
     cursor: pointer; /* Make logo itself clickable for modal */
@@ -615,7 +615,7 @@ footer a:hover {
     }
     .logo {
         height: 40px;
-        width: 40px; /* Ensure width is also adjusted */
+        width: auto; /* Auto width for horizontal SVG logo on mobile */
     }
     .zerow-favicon-button .button-favicon {
         height: 40px; /* Match logo size on small screens */
